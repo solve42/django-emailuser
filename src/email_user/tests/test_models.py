@@ -6,10 +6,10 @@ from .factories import EmailUserFactory
 
 class EmailUserTest(TestCase):
     def setUp(self):
-        self.owner = EmailUserFactory()
+        self.owner = EmailUserFactory.build()
 
     def test_fullname(self):
-        expected = f'{self.owner.first_name} {self.owner.last_name}'.strip()
+        expected = f"{self.owner.first_name} {self.owner.last_name}".strip()
 
         received = self.owner.get_full_name()
         self.assertEqual(received, expected)
@@ -18,12 +18,11 @@ class EmailUserTest(TestCase):
         self.assertEqual(self.owner.get_short_name(), self.owner.first_name)
 
     def test_email_user(self):
-        expected_subject = 'My Subject'
-        expected_message = 'My Message'
-        expected_from_email = 'asdf@fdsa.com'
+        expected_subject = "My Subject"
+        expected_message = "My Message"
+        expected_from_email = "asdf@fdsa.com"
 
-        self.owner.email_user(
-            expected_subject, expected_message, expected_from_email)
+        self.owner.email_user(expected_subject, expected_message, expected_from_email)
 
         self.assertEqual(len(mail.outbox), 1)
 

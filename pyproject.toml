@@ -1,10 +1,109 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel",
-    "setuptools_scm[toml]>=6.2"
-]
+requires = ["setuptools", "setuptools_scm[toml]>=7"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "django-emailuser"
+description = "A simple Django app with users identified by email instead of username."
+readme = { file = "README.rst", content-type = "text/x-rst" }
+authors = [
+    { name = "Eugen Massini" },
+    { name = "Solve42", email = "eugen.massini@solve42.de" },
+]
+
+license = "LicenseRef-BSD-3-Clause"
+license-files = [ "LICENSE" ]
+
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Framework :: Django :: 5.2",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+requires-python = ">=3.12"
+dynamic = ["dependencies","optional-dependencies","version"]
+
+[project.urls]
+Homepage = "https://github.com/eugenma/django-emailuser"
+
+[tool.setuptools]
+include-package-data = true
+
+# We rely on dynamic requirements, since requirements.txt is easier to handle in Dockerfile
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.dynamic.optional-dependencies]
+dev = {file = ["requirements.dev.txt"]}
+drf = {file = ["requirements.drf.txt"]}
+
+[tool.setuptools.packages.find]
+where = ["src/"]
+
 [tool.setuptools_scm]
-write_to = "src/email_user/version.py"
+version_file = "src/email_user/_version.py"
+version_scheme = "guess-next-dev"
+local_scheme = "node-and-date"
+fallback_version = "0.0.0"
+
+[tool.black]
+line-length = 120
+
+[tool.mypy]
+plugins = [
+    "mypy_django_plugin.main"
+]
+mypy_path = ["src"]
+
+warn_unused_configs = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = false
+#disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+warn_redundant_casts = true
+#warn_unused_ignores = true
+warn_return_any = true
+no_implicit_reexport = true
+strict_equality = true
+extra_checks = true
+
+# For Django
+disable_error_code = ["type-arg"]
+
+[tool.pytest.ini_options]
+testpaths  = ["tests"]
+pythonpath = ["src"]
+addopts    = "--tb=short -ra -q -s"
+log_cli = true
+log_cli_level = "INFO"
+
+[mypy.plugins.django-stubs]
+django_settings_module = "email_user.tests.settings"
+strict_settings = true
+strict_model_abstract_attrs = true
+
+[tool.django-stubs]
+django_settings_module = "email_user.tests.settings"
+strict_settings = true
+strict_model_abstract_attrs = true
+
+[[tool.mypy.overrides]]
+module = ["email_user.models.*", "email_user.serializers.*"]
+disable_error_code = ["no-untyped-call", "var-annotated"]
+
+[[tool.mypy.overrides]]
+module = ["email_user.tests.*"]
+disable_error_code = ["no-untyped-call"]

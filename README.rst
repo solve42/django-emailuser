@@ -7,18 +7,17 @@ Django email_users is a simple Django app which uses email address to identify u
 
 Requirements
 ---------------
-Package was tested with 
+Package was tested with
 
-* Python 3.6, 3.7, 3.8, 3.10
-* Django 3.0, 3.1, 3.2, 4.0
-
+* Python 3.12, 3.13, 3.14
+* Django 5.0, 5.1, 5.2
 
 If you intend to use it with Django Rest Framework then following versions were tested
 
-3.13.1
+3.16.1
 
 
-Installation 
+Installation
 -------------
 For pip use the following command
 
@@ -35,7 +34,7 @@ Quick start
 
 2. Set AUTH_USER_MODEL to 'email_user.EmailUser' in settings like this::
 
-   AUTH_USER_MODEL = 'email_user.EmailUser' 
+   AUTH_USER_MODEL = 'email_user.EmailUser'
 
 3. Run `python manage.py migrate` to create the models.
 
@@ -50,7 +49,7 @@ All settings are stored within the dictionary `DJANGO_EMAIL_USER`. The values ar
 
   * `exact` - save the email as is without modifying the case,
   * `lower` - convert everything to lower case,
-  * `normalize` - calls `BaseUserManager.normalize_email() <https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#django.contrib.auth.models.BaseUserManager.normalize_email>`_.
+  * `normalize` - calls `BaseUserManager.normalize_email() <https://docs.djangoproject.com/en/5.2/topics/auth/customizing/#django.contrib.auth.models.BaseUserManager.normalize_email>`_.
     This is the behaviour of the previous versions.
 
   Take care if you change this config in a running project. It changes the way how the fields are stored and retrieved.

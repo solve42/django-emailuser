@@ -1,0 +1,5 @@
+pre-commit
+tox~=4.34.1
+pytest-django~=4.11.1
+pytest
+factory-boy~=3.3.3
