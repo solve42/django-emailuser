@@ -12,3 +12,7 @@ django_emailuser.egg-info/
 .idea/
 
 src/email_user/_version.py
+
+dist/
+.python-version
+src/dj_emailuser.egg-info/
