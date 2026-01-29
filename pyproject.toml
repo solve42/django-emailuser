@@ -3,12 +3,12 @@ requires = ["setuptools", "setuptools_scm[toml]>=7"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "django-emailuser"
+name = "dj-emailuser"
 description = "A simple Django app with users identified by email instead of username."
 readme = { file = "README.rst", content-type = "text/x-rst" }
 authors = [
-    { name = "Eugen Massini" },
     { name = "Solve42", email = "eugen.massini@solve42.de" },
+    { name = "Eugen Massini" },
 ]
 
 license = "LicenseRef-BSD-3-Clause"
