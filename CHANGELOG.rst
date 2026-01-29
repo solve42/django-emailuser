@@ -29,4 +29,3 @@ Version history
 ===================
 * Supports Python 3.6
 * Supports Django 1.11
-
