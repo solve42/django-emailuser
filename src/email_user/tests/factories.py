@@ -1,4 +1,5 @@
-from factory.declarations import LazyAttribute, PostGenerationMethodCall
+import factory
+from factory.declarations import LazyAttribute
 from factory.django import DjangoModelFactory
 from factory.faker import Faker
 
@@ -18,4 +19,10 @@ class EmailUserFactory(DjangoModelFactory):
     email = LazyAttribute(lambda self: "{0}@example.com".format(self.last_name))
     is_staff = False
     is_active = True
-    password = PostGenerationMethodCall("set_password", PASSWORD)
+
+    @factory.post_generation  # type: ignore[attr-defined,untyped-decorator]
+    def password(self: models.EmailUser, create, extracted, **kwargs):
+        pw = extracted or EmailUserFactory.PASSWORD
+        self.set_password(pw)
+        if create:
+            self.save(update_fields=["password"])
