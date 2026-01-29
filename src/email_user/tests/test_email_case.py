@@ -1,21 +1,25 @@
 import dataclasses
-from typing import Mapping
+from typing import Mapping, TYPE_CHECKING, Type, cast
 
 import pytest
 from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import BaseUserManager
 
 from email_user.conf import StoreMethod
+from email_user.models import EmailUser
 from email_user.tests.factories import EmailUserFactory
+
+if TYPE_CHECKING:
+    pass
 
 
 def get_setting_value(value: str) -> Mapping[str, str]:
     return {
-        'STORE_METHOD': value,
+        "STORE_METHOD": value,
     }
 
 
-UserModel = get_user_model()
+UserModel = cast(Type[EmailUser], get_user_model())  # type: ignore[redundant-cast]
 
 template_email = "ExacT.ThIsAn@RaNdOm.ml"
 
@@ -29,21 +33,21 @@ class Sample:
 testdata = [
     Sample(StoreMethod.exact.name, template_email),
     Sample(StoreMethod.lower.name, template_email.lower()),
-    Sample(StoreMethod.normalize.name, BaseUserManager.normalize_email(template_email))
+    Sample(StoreMethod.normalize.name, BaseUserManager.normalize_email(template_email)),
 ]
 
 testdata_ids = [e.name for e in testdata]
 
 
 @pytest.fixture(params=testdata, ids=testdata_ids)
-def test_case(settings, request) -> Sample:
+def test_case(settings, request):
     settings.DJANGO_EMAIL_USER = get_setting_value(request.param.name)
     return request.param
 
 
 @pytest.mark.django_db
-def test_email_case_factory(test_case: Sample):
-    obj = EmailUserFactory(email=template_email)
+def test_email_case_factory(test_case):
+    obj = EmailUserFactory.create(email=template_email)
 
     actual = UserModel.objects.get(id=obj.id)
 
@@ -51,7 +55,7 @@ def test_email_case_factory(test_case: Sample):
 
 
 @pytest.mark.django_db
-def test_email_case_manager_create_user(test_case: Sample):
+def test_email_case_manager_create_user(test_case):
     data = EmailUserFactory.build(email=template_email)
     assert data.email == template_email, "Something went wrong, Factory should not modifiy the email."
 
@@ -62,7 +66,7 @@ def test_email_case_manager_create_user(test_case: Sample):
 
 
 @pytest.mark.django_db
-def test_email_case_manager_create_superuser(test_case: Sample):
+def test_email_case_manager_create_superuser(test_case):
     data = EmailUserFactory.build(email=template_email)
     assert data.email == template_email, "Something went wrong, Factory should not modifiy the email."
 
@@ -73,7 +77,7 @@ def test_email_case_manager_create_superuser(test_case: Sample):
 
 
 @pytest.mark.django_db
-def test_email_case_manager_create_by_save(test_case: Sample):
+def test_email_case_manager_create_by_save(test_case):
     expected = EmailUserFactory.build(email=template_email)
     assert expected.email == template_email, "Something went wrong, Factory should not modifiy the email."
 

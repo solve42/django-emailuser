@@ -18,13 +18,13 @@ class StoreMethod(enum.Enum):
     normalize = partial(BaseUserManager.normalize_email)
 
     @classmethod
-    def from_settings(cls) -> 'StoreMethod':
-        conf = getattr(settings, 'DJANGO_EMAIL_USER', {})  # type: Mapping[str, Any]
-        key = conf['STORE_METHOD']
+    def from_settings(cls) -> "StoreMethod":
+        conf = getattr(settings, "DJANGO_EMAIL_USER", {})  # type: Mapping[str, Any]
+        key = conf["STORE_METHOD"]
         try:
             return cls[key]
         except KeyError:
-            keys = ', '.join(map(str, cls))
+            keys = ", ".join(map(str, cls))
             msg = f"Key '{key}' not found. All available are {keys}."
             raise ValueError(msg)
 
