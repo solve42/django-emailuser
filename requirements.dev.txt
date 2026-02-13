@@ -1,5 +1,5 @@
 pre-commit
-tox~=4.34.1
+tox~=4.35.0
 pytest-django~=4.11.1
 pytest
 factory-boy~=3.3.3
